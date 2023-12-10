@@ -1,0 +1,145 @@
+{% extends "layout.html" %}
+{% block content %}
+	
+	<div class="media">
+		<H1>MISSION CONTROL</H1>
+
+		<iframe id="pi_stream"  class="picam" onload="( function(){
+			if (Number.isInteger(Number(location.host.slice(-4, )))) {
+				console.log('hep')
+				document.getElementById('pi_stream').src = 'http://' + location.host.slice(0, -5) + '{{ video_port }}';
+			} else {
+				document.getElementById('pi_stream').src = 'http://' + location.host + '{{ video_port }}'
+			};
+			
+		})()"></iframe>
+
+		{% if current_user.is_authenticated and current_user.is_pilot %}
+			<div class="control-panel">
+				<div class="row row-cols-3 btn-row-t">
+					<div class="col"></div>
+					<button id="forward" class="col btn btn-secondary">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
+  						<path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"/>
+						</svg>
+					</button>
+					<div class="col"></div>	
+				</div>
+				<div class="row row-cols-3 btn-row-m">
+					<button id="left" class="col btn btn-secondary">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
+  						<path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"/>
+  						<path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"/>
+						</svg>
+					</button>
+					<div class="col"></div>
+					<button id="right" class="col btn btn-secondary">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+  						<path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+  						<path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+						</svg>
+					</button>	
+				</div>
+				<div class="row row-cols-3 btn-row-b">
+					<div class="col"></div>
+					<button id="reverse" class="col btn btn-secondary">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
+  						<path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z"/>
+						</svg>
+					</button>
+					<div class="col"></div>	
+				</div>
+				<div class="row row-cols-3 btn-row-b">
+					<button type="button" class="btn btn-primary col" data-bs-toggle="modal" data-bs-target="#morse-form">
+			  		Morse
+					</button>
+					<div class="col"></div>
+					<div class="form-check form-switch col">
+		
+						<form >
+						<!-- method="POST" action="/mission_control/devices" -->
+							<fieldset>
+								{{ lightswitch_form.lightswitch.label( class="form-check-label") }}
+								{{ lightswitch_form.lightswitch(class="form-check-input", type="checkbox", role="switch", id="lightswitch") }}
+							</fieldset>
+  						<form>
+					</div>	
+				</div>
+			</div>
+
+			<!-- Modal -->
+			<div class="modal fade" id="morse-form" tabindex="-1" aria-labelledby="morse-form-label" aria-hidden="true">
+			  <div class="modal-dialog">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h1 class="modal-title fs-5" id="morse-form-label">Morse Code Beeper</h1>
+			        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			      </div>
+			      
+			      <form>
+			      <!-- method="POST" action="/mission_control/devices" -->
+				      <div class="modal-body">
+				      	<fieldset>
+				        	{{ morsecode_form.morse_text(id="morse-text", class="form-control form-control-lg", value="", autocomplete="off", placeholder="Type a message to convert to Morse code!") }}
+				        </fieldset>
+				      </div>
+				      <div class="modal-footer">
+				        <button id="modal-dismiss-btn" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				        <button id="morse-submit" type="button" class="btn btn-primary" data-bs-dismiss="modal">Send Message</button>
+				      </div>
+				   </form>
+				   
+			    </div>
+			  </div>
+			</div>
+ 
+			<script type="text/javascript" src="{{ url_for('static', filename='control_panel.js') }}"></script>
+
+		{% elif current_user.is_authenticated and not current_user.is_pilot%}
+			<div class="control-panel">
+				<h3>Another User is currently driving MORSEVIEW</h3>
+				<p>Only one user can drive morseview at a time. {% if current_user.queue_position == 1 %} You are next. {% else %} There's {{ current_user.queue_position - 1 }} in queue ahead of you. {% endif %} </p>
+			</div>
+			<script type="text/javascript">
+				console.log('set source authed not driving');
+				/*if ({{ current_user.queue_position }} === 1) {
+					socket.on("flash_queue", (flash) => {
+						console.log({{ current_user.queue_position }})
+						try {
+							existing_msg = document.getElementById("flash_msg")
+							if (existing_msg) {
+								existing_msg.remove()
+							}
+						} catch {
+							console.log("no prev messages")
+						}
+						let flash_elem = document.createElement("div");
+						flash_elem.id = "flash_msg"
+						flash_elem.innerHTML = flash;
+						let content = document.querySelector(".primary-content");
+						content.insertBefore(flash_elem, content.children[0])
+					})
+				}*/
+				
+
+				socket.on("rotate_users", () => {
+					window.location.replace("{{url_for('main.mission_control')}}");
+				})
+
+			</script>
+		{% else %}
+			<div class="control-panel">
+				<h3>Please Login</h3>
+				<p>You must be logged in to interact with MORSEVIEW. Please <a href="{{ url_for('users.login', next=url_for('main.mission_control')) }}">log in</a> or <a href="{{ url_for('users.register') }}">register</a></p>
+			</div>
+		{% endif %}
+				
+		
+	</div>
+	
+
+{% endblock content%}
+
+{% block sidebar %}
+	
+{% endblock sidebar %}

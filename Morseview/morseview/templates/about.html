@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+{% block content %}
+	<H1>About MORSEVIEW</H1>
+	<p>
+	Hello, I am Nathan, and welcome to MORSEVIEW! MORSEVIEW is a small, four wheeled rover with a video stream that can be viewed and controlled via this web site application, and it is my final project submission for Harvard University's CS50x introduction to computer science through edx.org. It represents many months of study and dedication from me, a good deal of patience with me from my family and friends, many late night conversations about programming and computer science with my Dad, and hundreds of youtube tutorial videos. Thank you for taking some time to explore my project, I hope you enjoy it, and thank you to all those who have supported me making it a reality.
+	<br><br>
+	The MORSEVIEW website is hosted on the rover itself, and allows users who have created a user account to control the rover on the MISSION CONTROL page, and leave messages on the COMMS page. Users who have not created a user account cannot control the rover or leave messages, but you can still view the video stream and see other user's comments. To create a user account, navigate to the register page and fill out the form.
+	<br><br>
+	Once logged in, users may control the rover on the MISSION CONTROL page. It's very easy to drive - simply press and hold any of the four direction buttons and you should see the camera view change. You can move forward, backward, or make zero point turns. At current, the rover only manages to turn up to about 45° to 55° at best, per turn command. This is a physical limitation of the device, and will be improved upon in coming iterations. I've found that to make larger turns, you can turn, reverse or advance slightly, then turn some more until you are facing the way you'd like to go. You may NOT change the camera angle relative to the rover itself - the camera is always oriented to the front of the rover. Due to delay, the rover does not move extraordinarily fast, or it would be uncontrollably out of sync with the camera. Users may also turn on a flashlight on and off the rover if the area is dark, and the rover has the ability to transmit audible morse code beeps. 
+	<br><br>
+	Much of the convienence the internet brings us today is through eliminating the need to wait. We send instant messages, we shop at any hour, we use an app to order ahead, and we never, ever, wait in line. It is, however, my belief that despite even all the power bestowed by the internet, we will never truly be free from the limitations of finite time and resources. The wisdom of ages past, "patience is a virtue", shall echo true in our ears again as we ask, "Dear user, please, wait your turn." It seems that the world may soon be full of autonomous vehicles, devices, and mechanisims of all types, and in this not so distant future one may ask "Who is using the family car?" - Though it drives itself to it's destination. The party is ending early because the host isn't feeling well, but young Timmy can't leave for another twenty minutes. His Mom has apparantly directed the car to pick up a curbside order of groceries, and it's been alloted the appropriate amount of time to do so. After all, the party isn't over for another two hours. Not the future you'd hoped for, but we've all been well equipped to handle this since kindergarten. I suppose Timmy will just have to wait his turn.
+	<br><br>
+	As a demonstration of this, MORSEVIEW uses this straight forward and time honored solution to the issue of multiple users logging in to drive the rover at the same time. You wait in line, and everyone takes turns. 
+	<br><br>
+	If only one person is logged in, that person may drive the rover for as long as they like.<br> 
+	:) [1]
+	<br><br>
+	If a second user logs in at the same time, then the second user is placed next in line, and the first user is given 15 minutes to finish their turn.<br>
+	(15:00) [1] 2 
+	<br><br>
+	If a third user logs in during this time, not suprisingly they will be placed third in line behind the second user.<br>
+	(04:20) [1] 2 3
+	<br><br>
+	When the 15 minutes has ended and the first user's turn has ended, the first user is moved to the back of the line and is no longer able to control the rover. The second user is given control of the rover, the third user becomes the next in line for the controls, and a new 15 minute turn begins.<br>
+	(15:00) [2] 3 1
+	<br><br>
+	If a fourth user logs in during this turn, they are placed at the end of the line, behind the first user who's turn just ended.<br>
+	(08:40) [2] 3 1 4 
+	<br><br>
+	The queue continues to rotate at the end of each turn, and each additional user who logs in is placed last in line. Users may navigate off the MISSION CONTROL page, they will not lose their place in the queue, even if they are the current driver. However, your time does not stop if you navigate away from the controls. You may come back to them, but you lose any time that you were away. 
+	If you log out, you forfeit your position in the queue, and if you are driving, the turn ends early and the queue is rotated. 
+	<br><br>
+	It is not required that you use a valid email to create your account. You may create an account with a "fake@address.com" if you like. It must be in "name@domain.com" format, but it doesn't have to be real, there is no verification of addresses submitted. HOWEVER, if you forget the password to an account with a fake address, there is no way to recover it. You will need a valid email in order to reset your password.
+	<br><br>
+	Thank you again for your interest in my project, I hope you enjoy using the Rover!
+	<br><br>
+	Best regards,<br> 
+	Nate<br> 
+	nathan.christopher.lee@gmail.com 
+	<br><br>
+	------<br>
+	All user submitted data, including email addresses, profile pics, names and posts are used strictly for the function of the site. No user data is shared with any person or organization outside of MORSEVIEW. User submitted data may be deleted by me, for any reason, at any time, and I do not assume any liability for user submitted data. By using MORSEVIEW, you agree to these terms.
+	</p>
+{% endblock content%}
