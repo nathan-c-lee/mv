@@ -1,0 +1,12 @@
+#!/bin/bash
+
+export SECRET_KEY="$(python -c 'import secrets; print(secrets.token_hex())')"
+export SQLALCHEMY_DATABASE_URI="sqlite:///site.db"
+export STREAM_PORT="YOUR STREAM HERE"
+
+#Email Parameters
+export MAIL_USERNAME="YOUR EMAIL HERE"
+export MAIL_PASSWORD="YOUR PASSWORD HERE"
+export MAIL_SERVER="smtp.gmail.com"
+export MAIL_PORT=587
+export MAIL_USE_TLS=true
